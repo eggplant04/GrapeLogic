@@ -16,13 +16,45 @@ using std::vector;
 
 
 bool IsValidExpression(const std::string& input, const std::vector<char>& allowedCharacters) {
-    for (char ch : input) {
-        if (std::find(allowedCharacters.begin(), allowedCharacters.end(), ch) == allowedCharacters.end()) {
+    for (char ch : input) 
+    {
+        if (std::find(allowedCharacters.begin(), allowedCharacters.end(), ch) == allowedCharacters.end()) 
+        {
             return false; // Invalid character found
         }
     }
+
+    int paraLvl = 0;
+    bool paraOpen = false;
+    for (char ch : input)
+    {
+        if (ch == '(')
+        {
+            ++paraLvl;
+            paraOpen = true;
+        }
+        else if (ch == ')')
+        {
+            if (!paraOpen)
+            {
+                return false;
+            }
+            --paraLvl;
+            if (!paraLvl)
+            {
+                paraOpen = false;
+            }
+        }
+    }
+    if (paraOpen)
+    {
+        return false;
+    }
+
     return true; // All characters are valid
 }
+
+
 
 double EvaluateExpression(std::string input, double lastResult) {
     // Replace 'r' with the last result
@@ -76,7 +108,7 @@ int main(int argc, char* argv[]) {
     double result = 0.0;
     bool hasError = false;
 
-    vector<char> allowedCharacters = { '+', '-', '/', '*', '1', '2' , '3' , '4' , '5' , '6' , '7' , '8' , '9', '0' , ' ', 'r', '.'};
+    vector<char> allowedCharacters = { '+', '-', '/', '*', '1', '2' , '3' , '4' , '5' , '6' , '7' , '8' , '9', '0' , ' ', 'r', '.', '(', ')'};
 
     // Main game loop
     while (!WindowShouldClose()) {    // Detect window close button or ESC key
